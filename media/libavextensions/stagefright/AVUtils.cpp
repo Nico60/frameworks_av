@@ -81,10 +81,8 @@ int AVUtils::getAudioSampleBits(const sp<MetaData> &) {
     return 16;
 }
 
-int AVUtils::getAudioSampleBits(const sp<AMessage> &format) {
-    AudioEncoding encoding = kAudioEncodingPcm16bit;
-    format->findInt32("pcm-encoding", (int32_t*)&encoding);
-    return audioEncodingToBits(encoding);
+int AVUtils::getAudioSampleBits(const sp<AMessage> &) {
+    return 16;
 }
 
 audio_format_t AVUtils::updateAudioFormat(audio_format_t audioFormat,
