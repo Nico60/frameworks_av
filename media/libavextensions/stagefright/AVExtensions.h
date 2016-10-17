@@ -33,7 +33,6 @@
 #include <common/AVExtensionsCommon.h>
 #include <system/audio.h>
 #include <media/IOMX.h>
-#include <media/AudioParameter.h>
 #include <camera/android/hardware/ICamera.h>
 #include <media/mediarecorder.h>
 #include <media/stagefright/MetaData.h>
@@ -45,6 +44,7 @@ struct ACodec;
 struct MediaCodec;
 struct ALooper;
 class MediaExtractor;
+class AudioParameter;
 class CameraParameters;
 class MediaBuffer;
 class CameraSource;
@@ -117,18 +117,18 @@ struct AVUtils {
                 const char* mime, bool encoder, const sp<AMessage> &format);
     virtual bool isEnhancedExtension(const char *extension);
 
-    virtual bool hasAudioSampleBits(const sp<MetaData> &meta);
-    virtual bool hasAudioSampleBits(const sp<AMessage> &format);
-    virtual int getAudioSampleBits(const sp<MetaData> &meta);
-    virtual int getAudioSampleBits(const sp<AMessage> &format);
+    virtual bool hasAudioSampleBits(const sp<MetaData> &);
+    virtual bool hasAudioSampleBits(const sp<AMessage> &);
+    virtual int getAudioSampleBits(const sp<MetaData> &);
+    virtual int getAudioSampleBits(const sp<AMessage> &);
     virtual audio_format_t updateAudioFormat(audio_format_t audioFormat,
-            const sp<MetaData> &meta);
+            const sp<MetaData> &);
     virtual audio_format_t updateAudioFormat(audio_format_t audioFormat,
-            const sp<AMessage> &format);
+            const sp<AMessage> &);
 
     virtual bool canOffloadAPE(const sp<MetaData> &meta);
 
-    virtual bool useQCHWEncoder(const sp<AMessage> &format,Vector<AString> *matchingCodecs);
+    virtual bool useQCHWEncoder(const sp<AMessage> &,Vector<AString> *) { return false; }
 
     virtual int32_t getAudioMaxInputBufferSize(audio_format_t audioFormat,
             const sp<AMessage> &);
@@ -167,11 +167,6 @@ struct AVUtils {
 
     // Used by ATSParser
     virtual bool IsHevcIDR(const sp<ABuffer> &accessUnit);
-
-    enum {
-        kPortIndexInput  = 0,
-        kPortIndexOutput = 1
-    };
 
     // ----- NO TRESSPASSING BEYOND THIS LINE ------
     DECLARE_LOADABLE_SINGLETON(AVUtils);
